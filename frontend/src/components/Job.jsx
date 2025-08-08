@@ -2,9 +2,12 @@ import React from 'react'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { IoBookmarkOutline } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
+import { Link, useNavigate,  } from 'react-router-dom';
 
 
 const Job = () => {
+    const navigate= useNavigate()
+    const jobid="dsafsdfczdxc"
     return (
         <>
             <div className="border-1 shadow-xl rounded-md w-full md:w-1/4 py-5 px-5 my-5 mx-5">
@@ -29,14 +32,14 @@ const Job = () => {
                 </div>
                 <div className="mt-5 flex items-center justify-between">
                     <div className="">
-                    <button className='bg-sky-700 text-sm px-6 py-1.5 mr-2 rounded-md text-white font-bold cursor-pointer hover:bg-sky-900'>Apply</button>
-                    <button className='ml-1 text-sm font-semibold cursor-pointer hover:font-bold hover:underline '>Details </button></div>
+                        <button className='bg-sky-700 text-sm px-6 py-1.5 mr-2 rounded-md text-white font-bold cursor-pointer hover:bg-sky-900'>Save</button>
+
+                        <button onClick={()=>navigate(`/details/${jobid}`)} className='ml-1 text-sm font-semibold cursor-pointer hover:font-bold hover:underline '>
+                            <Link to="/details/:`${}`">Details</Link> </button></div>
                     <div className="">
+
                         <span className='text-xs font-semibold text-slate-500'>2 day ago</span></div>
                 </div>
-
-
-
             </div>
 
 

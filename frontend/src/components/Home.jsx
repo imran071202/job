@@ -47,7 +47,7 @@ const Home = () => {
               </Link> */}
               <div className="flex mx-auto mt-6 justify-center items-center w-[80%] rounded-lg border-1 border-sky-950 hover:scale-105">
                 <input type="text" placeholder='Search jobs' className='bg-slate-300 text-black font-semibold w-[91%] py-3.5 outline-0 border-0 rounded-l-md text-center ' />
-                <button className='px-4.5  py-4.5 bg-sky-700 cursor-pointer border-r-1 border-sky-700 hover:bg-sky-950 rounded-r-md text-white w-[17%] md:w-[9%] '><FaSearch /></button>
+                <button className='px-4.5  py-4.5 bg-sky-700 cursor-pointer border-r-1 border-sky-600 hover:bg-sky-600 rounded-r-md text-white w-[17%] md:w-[9%] '><FaSearch /></button>
 
               </div>
             </div>

@@ -7,6 +7,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/apiPoint'
+import { useDispatch, useSelector } from 'react-redux'
+import store from '@/redux/store'
+import { setloading, setuser } from '@/redux/authSlice'
+import { Loader2 } from 'lucide-react'
 const Login = () => {
 
     const [input, setinput] = useState({
@@ -14,8 +18,10 @@ const Login = () => {
         password: "",
         role: "",
     })
-    const navigate = useNavigate()
+    const { loading } = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
 
+    const navigate = useNavigate()
     const changeEventHandler = (e) => {
         setinput({ ...input, [e.target.name]: e.target.value })
     }
@@ -23,6 +29,7 @@ const Login = () => {
         e.preventDefault()
 
         try {
+            dispatch(setloading(true))
             const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
                 headers: {
                     "Content-Type": "application/json"
@@ -30,6 +37,7 @@ const Login = () => {
                 withCredentials: true
             })
             if (res.data.success) {
+                dispatch(setuser(res.data.foundUser))
                 navigate("/")
                 toast.success(res.data.message)
             }
@@ -41,6 +49,8 @@ const Login = () => {
             // const errorMessage =
             //     error?.response?.data?.message || "Login failed. Please try again.";
             // toast.error(errorMessage)
+        } finally {
+            dispatch(setloading(false))
         }
 
     }
@@ -71,10 +81,12 @@ const Login = () => {
                             <input type="radio" value="recruiter" name='role' className='cursor-pointer' checked={input.role === 'recruiter'} onChange={changeEventHandler} />
                             <Label>Recruiter</Label>
                         </div></div>
+                    {
+                        loading ? <Button type="submit" className=" my-4 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold"><Loader2 />Wait</Button> : <div className="">
+                            <Button type="submit" className=" my-4 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold">Login</Button>
+                        </div>
+                    }
 
-                    <div className="">
-                        <Button type="submit" className=" my-4 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold">Login</Button>
-                    </div>
                     <span className='text-sm'>Don't have any account ? <Link to="/signup"><span className='text-blue-400 cursor-pointer font-bold '> Sign up</span></Link></span>
                 </form>
 

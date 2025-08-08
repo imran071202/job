@@ -8,14 +8,15 @@ import { FiLogOut } from "react-icons/fi";
 import logo from '../../assets/image/skill-bridge.png';
 import { Link } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from 'react-redux';
+import store from '@/redux/store';
 // import logo from '../../assets/image/logo.png';
 
 
 
 const Navbar = () => {
 
-    const [user, setuser] = useState(false)
-
+const { user } = useSelector(store => store.auth)
     return (
         <>
 
@@ -53,7 +54,7 @@ const Navbar = () => {
                                         </Avatar>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-60 md:w-80 flex flex-col justify-center ">
+                                <PopoverContent className="w-60 md:w-80 flex flex-col justify-center bg-slate-200 border-0 ">
                                     <div className="flex flex-col items-center gap-3">
                                         <Avatar className="h-10 w-10">
                                             <AvatarImage src="https://github.com/shadcn.png" />
@@ -66,7 +67,7 @@ const Navbar = () => {
                                     <div className="flex flex-col md:flex-row md:justify-between md:mx-5 pt-5 justify-center mx-auto ">
                                         <div className="flex items-center">
 
-                                            <Button variant="link" className="cursor-pointer text-base" ><FaUserTie />View Profile</Button>
+                                            <Button variant="link" className="cursor-pointer text-base" ><FaUserTie /><Link to="/profile">View Profile</Link></Button>
                                         </div>
                                         <div className=" flex items-center">
 
