@@ -4,7 +4,7 @@ import Navbar from './components/shared/Navbar'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/Home'
-import Login from './components/auth/login'
+import Login from './components/auth/Login'
 import SignUp from './components/auth/SignUp'
 import Jobs from './components/Jobs'
 import Footer from './components/Footer'
