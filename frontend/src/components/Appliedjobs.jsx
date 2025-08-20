@@ -1,13 +1,13 @@
 // components/AppliedJobsTable.jsx
 import React from 'react';
 
-const AppliedJobsTable = () => {
+const AppliedJobsTable = ({job}) => {
     return (
         <div className="overflow-x-auto bg-white rounded-md shadow-md mt-3 mb-16 ">
             <table className="min-w-full text-sm text-left">
                 <thead className="bg-gray-100 text-gray-700 uppercase text-base">
                     <tr>
-                        <th className="py-3 px-4 text-left">Job Title</th>
+                        <th className="py-3 px-4 text-left">{job?.title}</th>
                         <th className="py-3 px-4">Company</th>
                         <th className="py-3 px-4">Location</th>
                         <th className="py-3 px-4">Status</th>

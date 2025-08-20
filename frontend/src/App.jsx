@@ -11,6 +11,8 @@ import Footer from './components/Footer'
 import Browes from './components/Browes'
 import Profile from './components/Profile'
 import Detailsjob from './components/Detailsjob'
+import Companies from './components/companyHr/Companies'
+import CompanyHomePage from './components/companyHr/CompanyhomePage'
 
 
 const appRouter = createBrowserRouter([
@@ -42,6 +44,14 @@ const appRouter = createBrowserRouter([
   {
     path:'/profile',
     element:<Profile/>
+  },
+  {
+    path:'/admin/companies',
+    element:<CompanyHomePage/>
+  },
+   {
+    path:'/companies',
+    element:<Companies/>
   },
 ])
 

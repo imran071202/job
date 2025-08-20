@@ -4,9 +4,9 @@ import isAuth from "../middleware/isAuth.js"
 
 const router = express.Router()
 
-router.route("/post").post(isAuth, postJob )
-router.route("/get").get(isAuth, allJob)
-router.route("/jobs/:id").get(isAuth,getJobById)
+router.route("/post").post(isAuth, postJob)
+router.route("/get").get(allJob)
+router.route("/jobs/:id").get(getJobById)
 router.route("/admin/jobs").get(isAuth, getAdminJob)
 
 

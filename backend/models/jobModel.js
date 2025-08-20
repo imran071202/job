@@ -36,13 +36,13 @@ const jobSchema = new mongoose.Schema({
     create_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true 
     },
-    application: {
+    applications: 
+    [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Application",
-
-    },
+    }],
 
 
 }, { timestamps: true })

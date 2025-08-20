@@ -13,7 +13,7 @@ const isAuth = async (req, res, next) => {
 
     const decode = jwt.verify(authToken, process.env.SECRET_KEY);
 
-    req.id = decode.userID; // Add user ID to request for later use
+    req._id = decode.userID; // Add user ID to request for later use
     next();
   } catch (error) {
     console.error("Auth Error:", error.message); // Log for debugging

@@ -93,13 +93,15 @@ import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { json } from "express";
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 // REGISTER
 export const register = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
         // console.log(fullname, email, phoneNumber, password, role);
-        
+
 
         if (!fullname || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({
@@ -107,6 +109,9 @@ export const register = async (req, res) => {
                 success: false
             });
         }
+        const file=req.file
+    const fileUrl=getDataUri(file)
+    const cloudresponse=await cloudinary.uploader.upload(fileUrl.content)
 
         let existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -123,7 +128,10 @@ export const register = async (req, res) => {
             email,
             phoneNumber,
             password: hashPassword,
-            role
+            role,
+            profile:{
+                profilePhoto:cloudresponse.secure_url
+            }
         });
 
         return res.status(201).json({
@@ -230,50 +238,102 @@ export const logout = async (req, res) => {
 // update profile
 
 export const updateProfile = async (req, res) => {
+  try {
+    const { fullname, email, phoneNumber, bio, skills,resume } = req.body;
 
-    try {
-        const { fullname, email, phoneNumber, bio, skills } = req.body
-
-        let skillArray
-        if (skills) {
-            skillArray = skills.split(",")
-        }
-        const userId = req._id // middleware 
-        let updateUser = await User.findById(userId)
-        if (!updateUser) {
-            return res.status(404).json({
-                message: "User not found",
-                success: false
-            });
-        }
-
-        // update data
-        if (fullname) updateUser.fullname = fullname
-        if (email) updateUser.email = email
-        if (phoneNumber) updateUser.phoneNumber = phoneNumber
-        if (bio) updateUser.bio = bio
-        if (skills) updateUser.skills = skills
-
-        await updateUser.save()
-
-        updateUser = {
-            _id: updateUser._id,
-            fullname: updateUser.fullname,
-            email: updateUser.email,
-            phoneNumber: updateUser.phoneNumber,
-            role: updateUser.role,
-            profile: updateUser.profile
-        };
-        return res.status(200).json({
-            message: 'user update succesfully',
-            updateUser,
-            success: true
-
-        })
-
-    } catch (error) {
-        console.log(error);
-
-
+    const file=req.file
+    const fileUrl=getDataUri(file)
+    const cloudresponse=await cloudinary.uploader.upload(fileUrl.content)
+    
+    let skillArray;
+    if (skills) {
+      skillArray = skills.split(",").map(s => s.trim());
     }
-}
+
+    const userId = req._id; // ensure your auth middleware sets req.userId
+    let updateUser = await User.findById(userId);
+
+    if (!updateUser) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false
+      });
+    }
+
+    if (fullname) updateUser.fullname = fullname;
+    if (email) updateUser.email = email;
+    if (phoneNumber) updateUser.phoneNumber = phoneNumber;
+    if (bio) updateUser.profile.bio = bio;
+    if (skills) updateUser.profile.skills = skillArray;
+    if(cloudresponse){
+        updateUser.profile.resume= cloudresponse.secure_url
+        updateUser.profile.resumeOrginalName=file.originalname
+    }
+
+    await updateUser.save();
+
+    return res.status(200).json({
+      message: 'User updated successfully',
+      user: updateUser,
+      success: true
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Server error',
+      success: false
+    });
+  }
+};
+
+
+// export const updateProfile = async (req, res) => {
+
+//     try {
+//         const { fullname, email, phoneNumber, bio, skills } = req.body
+        
+//         let skillArray
+//         if (skills) {
+//             skillArray = skills.split(",")
+//         }
+//         const userId = req._id // middleware 
+//         let updateUser = await User.findById(userId)
+//         if (!updateUser) {
+//             return res.status(404).json({
+//                 message: "User not found",
+//                 success: false
+//             });
+//         }
+
+//         // update data
+//         if (fullname) updateUser.fullname = fullname
+//         if (email) updateUser.email = email
+//         if (phoneNumber) updateUser.phoneNumber = phoneNumber
+//         if (bio) updateUser.bio = bio
+//         if (skills) updateUser.skills = skillArray;
+
+
+//         await updateUser.save()
+
+//         updateUser = {
+//             _id: updateUser._id,
+//             fullname: updateUser.fullname,
+//             email: updateUser.email,
+//             phoneNumber: updateUser.phoneNumber,
+//             role: updateUser.role,
+//             profile: updateUser.profile
+//         };
+//         return res.status(200).json({
+//             message: 'user update succesfully',
+//             updateUser,
+//             success: true
+
+//         })
+
+//     } catch (error) {
+//         console.log(error);
+
+
+//     }
+// }

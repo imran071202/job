@@ -7,9 +7,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/apiPoint'
 import { toast } from 'sonner'
+import { useDispatch, useSelector } from 'react-redux'
+import { Loader2 } from 'lucide-react'
+import { setloading } from '@/redux/authSlice'
 
 
 const SignUp = () => {
+        const { loading } = useSelector((state) => state.auth)
+
+    const dispatch = useDispatch()
 
     const [input, setinput] = useState({
         fullname: "",
@@ -39,6 +45,7 @@ const SignUp = () => {
             formData.append("file", input.file)
         }
         try {
+            dispatch(setloading(true))
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -53,6 +60,8 @@ const SignUp = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message)
+        }finally{
+            dispatch(setloading(false))
         }
 
     }
@@ -97,7 +106,11 @@ const SignUp = () => {
                             onChange={changeFileHandler} />
                     </div>
                     <div className="">
-                        <Button type="submit" className=" mt-2 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold">Sign Up</Button>
+                        {
+                            loading ? <Button type="submit" className=" my-4 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold"><Loader2 />Wait</Button> : <div className="">
+                                <Button type="submit" className=" my-4 hover:bg-sky-700 mx-auto border-1 w-full cursor-pointer bg-sky-500 text-white font-bold">Sign Up</Button>
+                            </div>
+                        }
                     </div>
                     <span className='text-sm mt-2 mb-3'>Already have an account ?<Link to="/login"><span className='text-blue-400 cursor-pointer font-bold  '> Login</span></Link></span>
                 </form>
